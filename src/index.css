@@ -1,0 +1,32 @@
+
+
+@font-face {
+  font-family: "Iran-sans-bold";
+  src: url("./assets/fonts/IRANSansX-Bold.eot") format("eot");
+  src: local("IRANSansX-Bold");
+  src: url("./assets/fonts/IRANSansX-Bold.ttf") format("truetype"),
+    url("./assets/fonts/IRANSansX-Bold.woff") format("woff"),
+    url("./assets/fonts/IRANSansX-Bold.woff2") format("woff2"),
+    url("./assets/fonts/IRANSansX-Bold.svg") format("svg");
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Iran-sans-reg";
+  src: url("./assets/fonts/IRANSansX-Regular.eot") format("eot");
+  src: local("Iran-sans-reg");
+  src: url("./assets/fonts/IRANSansX-Regular.ttf") format("truetype"),
+    url("./assets/fonts/IRANSansX-Regular.woff") format("woff"),
+    url("./assets/fonts/IRANSansX-Regular.woff2") format("woff2"),
+    url("./assets/fonts/IRANSansX-Regular.svg") format("svg");
+
+  font-style: normal;
+  font-display: swap;
+}
+
+html, body, #root {
+  direction: rtl;
+    font-family: "Iran-sans-bold" ;
+}
+
