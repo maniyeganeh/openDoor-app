@@ -1,0 +1,61 @@
+.register-container {
+  max-width: 420px;
+  margin: 0 auto;
+  padding: 16px;
+ 
+}
+.register-wrapper {
+  height: 80vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow-y: auto;
+  
+
+}
+.ant-steps-item-title{
+    font-family: "Iran-sans-bold";
+}
+.role-cards .ant-card {
+  text-align: center;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.role-cards .ant-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.role-cards .ant-card.selected {
+  border: 2px solid #1890ff !important;
+  box-shadow: 0 6px 16px rgba(24, 144, 255, 0.3);
+  transform: scale(1.02);
+}
+
+.register-wrapper label{
+     font-family: "Iran-sans-bold";
+}
+.ant-card{
+    margin-bottom: 20px
+}
+.ant-card-body{
+    font-family: "Iran-sans-bold";
+}
+.ant-input{
+    font-family: "Iran-sans-reg";
+}
+.ant-form-item-explain-error{
+    font-family: "Iran-sans-bold";
+}
+.ant-btn{
+    font-family: "Iran-sans-bold";
+}
+@media (max-width: 600px) {
+  .ant-steps-item-title {
+    display: none;
+    
+  }
+}
