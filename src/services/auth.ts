@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:5000/api/auth'; // آدرس API خودت رو بزن
+const API_URL = 'http://localhost:3000/api/auth'; // آدرس API خودت رو بزن
 
 export const login = async (email: string, password: string) => {
   const { data } = await axios.post(`${API_URL}/login`, { email, password });

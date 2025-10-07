@@ -10,18 +10,51 @@ const { Step } = Steps;
 const Register: React.FC = () => {
   const [current, setCurrent] = useState(0);
   const [role, setRole] = useState<'consultant' | 'developer' | null>(null);
-  const [form] = Form.useForm();
+  const [formStep1] = Form.useForm();
+  const [formStep2] = Form.useForm();
   const { dispatch } = useAuth();
   const navigate = useNavigate();
 
-  const next = () => setCurrent(current + 1);
-  const prev = () => setCurrent(current - 1);
-
-  const handleSubmit = async (values: any) => {
+  const next = async () => {
     try {
-      const res = await axios.post('/api/auth/register', { ...values, role });
+      if (current === 1) {
+        console.log(formStep1.getFieldsValue());
 
-      // لاگین خودکار بعد از ثبت‌نام
+        await formStep1.validateFields();
+      }
+      setCurrent((prev) => prev + 1);
+    } catch {
+      message.error('اطلاعات را کامل وارد کنید');
+    }
+  };
+
+  const prev = () => setCurrent((prev) => prev - 1);
+
+  const handleRegister = async () => {
+    console.log(formStep1.getFieldValue(), formStep2.getFieldValue());
+
+    try {
+      // Validate both forms
+      await formStep1.validateFields();
+      await formStep2.validateFields();
+
+      const values1 = formStep1.getFieldsValue();
+      const values2 = formStep2.getFieldsValue();
+
+      if (!role) {
+        message.error('نقش را انتخاب کنید');
+        return;
+      }
+
+      const { password } = values1;
+      const payload = { ...values1, ...values2, role };
+      console.log('📦 Payload ارسال‌شده:', payload);
+
+      const res = await axios.post(
+        'http://localhost:3000/api/auth/register',
+        payload
+      );
+
       dispatch({
         type: 'LOGIN',
         payload: {
@@ -31,16 +64,17 @@ const Register: React.FC = () => {
           token: res.data.token,
           email: res.data.user.email,
           mobile: res.data.user.mobile,
+
           isVerified: res.data.user.isVerified,
         },
       });
 
       localStorage.setItem('token', res.data.token);
-
-      message.success('ثبت نام موفقیت آمیز بود');
+      message.success('ثبت‌نام موفقیت‌آمیز بود 🎉');
       navigate('/dashboard');
     } catch (err: any) {
-      message.error(err.response?.data?.message || 'خطا در ثبت نام');
+      console.error(err);
+      message.error(err.response?.data?.message || 'خطا در ثبت‌نام');
     }
   };
 
@@ -54,6 +88,7 @@ const Register: React.FC = () => {
         </Steps>
 
         <div style={{ marginTop: 24 }}>
+          {/* مرحله ۱ */}
           {current === 0 && (
             <div className="role-cards">
               <Card
@@ -83,8 +118,14 @@ const Register: React.FC = () => {
             </div>
           )}
 
+          {/* مرحله ۲ */}
           {current === 1 && (
-            <Form form={form} layout="vertical" onFinish={next}>
+            <Form
+              form={formStep1}
+              layout="vertical"
+              preserve={true}
+              onFinish={next}
+            >
               <Form.Item label="نام" name="name" rules={[{ required: true }]}>
                 <Input />
               </Form.Item>
@@ -98,10 +139,18 @@ const Register: React.FC = () => {
               <Form.Item
                 label="رمز عبور"
                 name="password"
-                rules={[{ required: true }]}
+                rules={[
+                  {
+                    type: 'string',
+                    required: true,
+                    min: 6,
+                    message: 'حداقل ۶ کاراکتر',
+                  },
+                ]}
               >
                 <Input.Password />
               </Form.Item>
+
               <div className="form-buttons">
                 <Button onClick={prev}>قبلی</Button>
                 <Button type="primary" htmlType="submit">
@@ -111,8 +160,9 @@ const Register: React.FC = () => {
             </Form>
           )}
 
+          {/* مرحله ۳ */}
           {current === 2 && (
-            <Form form={form} layout="vertical" onFinish={handleSubmit}>
+            <Form form={formStep2} layout="vertical" preserve={true}>
               {role === 'consultant' ? (
                 <>
                   <Form.Item
@@ -148,8 +198,8 @@ const Register: React.FC = () => {
               )}
               <div className="form-buttons">
                 <Button onClick={prev}>قبلی</Button>
-                <Button type="primary" htmlType="submit">
-                  ثبت نام
+                <Button type="primary" onClick={handleRegister}>
+                  ثبت‌نام
                 </Button>
               </div>
             </Form>
