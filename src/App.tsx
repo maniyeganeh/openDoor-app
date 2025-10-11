@@ -7,26 +7,41 @@ import {
 } from 'react-router-dom';
 import Login from './pages/Login';
 import Register from './pages/Register';
-import ProtectedRoute from './components/ProtectedRoute';
 import Dashboard from './pages/Dashboard';
+import AdminDashboard from './pages/admin/AdminDashboard';
+import { ProtectedRoute } from './components/ProtectedRoute';
 
 function App() {
   return (
     <Router>
       <Routes>
         <Route path="/" element={<Navigate to="/login" />} />
+
+        {/* صفحات عمومی */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
 
-        {/* مسیر محافظت‌شده */}
+        {/* داشبورد کاربر (مشاور / سازنده) */}
         <Route
-          path="/dashboard"
+          path="/dashboard/*"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute allowedRoles={['consultant', 'developer']}>
               <Dashboard />
             </ProtectedRoute>
           }
         />
+
+        {/* داشبورد ادمین */}
+        <Route
+          path="/admin/*"
+          element={
+            <ProtectedRoute allowedRoles={['admin']}>
+              <AdminDashboard />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route path="*" element={<Navigate to="/login" />} />
       </Routes>
     </Router>
   );

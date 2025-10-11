@@ -1,20 +1,23 @@
-import React from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
-interface Props {
+export const ProtectedRoute = ({
+  children,
+  allowedRoles,
+}: {
   children: React.ReactNode;
-}
-
-const ProtectedRoute: React.FC<Props> = ({ children }) => {
+  allowedRoles: string[];
+}) => {
   const { state } = useAuth();
+  const user = state.user;
 
-  if (!state.user || !state.user.token) {
-    // اگه کاربر لاگین نکرده باشه بره صفحه لاگین
-    return <Navigate to="/login" replace />;
+  if (!user) {
+    return <Navigate to="/login" />;
+  }
+
+  if (!allowedRoles.includes(user.role)) {
+    return <Navigate to="/login" />;
   }
 
   return <>{children}</>;
 };
-
-export default ProtectedRoute;

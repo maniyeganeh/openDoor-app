@@ -12,15 +12,16 @@ const Register: React.FC = () => {
   const [role, setRole] = useState<'consultant' | 'developer' | null>(null);
   const [formStep1] = Form.useForm();
   const [formStep2] = Form.useForm();
+  const [step1Data, setStep1Data] = useState<any>({}); // ✅ ذخیره داده‌های مرحله دوم
   const { dispatch } = useAuth();
   const navigate = useNavigate();
 
   const next = async () => {
     try {
       if (current === 1) {
-        console.log(formStep1.getFieldsValue());
-
         await formStep1.validateFields();
+        const values = formStep1.getFieldsValue();
+        setStep1Data(values); // ✅ ذخیره نام، ایمیل و پسورد
       }
       setCurrent((prev) => prev + 1);
     } catch {
@@ -31,14 +32,8 @@ const Register: React.FC = () => {
   const prev = () => setCurrent((prev) => prev - 1);
 
   const handleRegister = async () => {
-    console.log(formStep1.getFieldValue(), formStep2.getFieldValue());
-
     try {
-      // Validate both forms
-      await formStep1.validateFields();
       await formStep2.validateFields();
-
-      const values1 = formStep1.getFieldsValue();
       const values2 = formStep2.getFieldsValue();
 
       if (!role) {
@@ -46,9 +41,8 @@ const Register: React.FC = () => {
         return;
       }
 
-      const { password } = values1;
-      const payload = { ...values1, ...values2, role };
-      console.log('📦 Payload ارسال‌شده:', payload);
+      // ✅ ترکیب داده‌های مرحله ۲ و ۳
+      const payload = { ...step1Data, ...values2, role };
 
       const res = await axios.post(
         'http://localhost:3000/api/auth/register',
@@ -64,7 +58,6 @@ const Register: React.FC = () => {
           token: res.data.token,
           email: res.data.user.email,
           mobile: res.data.user.mobile,
-
           isVerified: res.data.user.isVerified,
         },
       });
@@ -120,12 +113,7 @@ const Register: React.FC = () => {
 
           {/* مرحله ۲ */}
           {current === 1 && (
-            <Form
-              form={formStep1}
-              layout="vertical"
-              preserve={true}
-              onFinish={next}
-            >
+            <Form form={formStep1} layout="vertical" preserve={true}>
               <Form.Item label="نام" name="name" rules={[{ required: true }]}>
                 <Input />
               </Form.Item>
@@ -153,7 +141,11 @@ const Register: React.FC = () => {
 
               <div className="form-buttons">
                 <Button onClick={prev}>قبلی</Button>
-                <Button type="primary" htmlType="submit">
+                <Button
+                  type="primary"
+                  onClick={next}
+                  style={{ marginRight: '10px' }}
+                >
                   ادامه
                 </Button>
               </div>
@@ -198,7 +190,11 @@ const Register: React.FC = () => {
               )}
               <div className="form-buttons">
                 <Button onClick={prev}>قبلی</Button>
-                <Button type="primary" onClick={handleRegister}>
+                <Button
+                  type="primary"
+                  onClick={handleRegister}
+                  style={{ marginRight: '10px' }}
+                >
                   ثبت‌نام
                 </Button>
               </div>

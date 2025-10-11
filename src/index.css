@@ -30,3 +30,18 @@ html, body, #root {
     font-family: "Iran-sans-bold" ;
 }
 
+.ant-table table {
+  font-family: "Iran-sans-reg";
+}
+.ant-tag{
+  font-family: "Iran-sans-reg";
+}
+.ant-empty-description{
+  font-family: "Iran-sans-reg";
+}
+.ant-statistic-title{
+  font-family: "Iran-sans-bold";
+}
+.ant-message-notice-content{
+  font-family: "Iran-sans-reg";
+}
