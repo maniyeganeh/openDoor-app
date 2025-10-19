@@ -16,7 +16,15 @@ export const ProtectedRoute = ({
   }
 
   if (!allowedRoles.includes(user.role)) {
-    return <Navigate to="/login" />;
+    switch (user.role) {
+      case 'admin':
+        return <Navigate to="/admin" replace />;
+      case 'consultant':
+      case 'developer':
+        return <Navigate to="/consultant" replace />;
+      default:
+        return <Navigate to="/login" replace />;
+    }
   }
 
   return <>{children}</>;

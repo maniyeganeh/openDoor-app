@@ -37,10 +37,22 @@ const Login: React.FC = () => {
       localStorage.setItem('token', res.data.token);
 
       message.success('ورود موفقیت‌آمیز');
-      if (res.data.user.role === 'admin') {
-        navigate('/admin', { replace: true });
-      } else {
-        navigate('/dashboard', { replace: true });
+      switch (res.data.user.role) {
+        case 'admin':
+          navigate('/admin', { replace: true });
+          break;
+
+        case 'consultant':
+          navigate('/consultant', { replace: true });
+          break;
+
+        case 'developer':
+          navigate('/developer', { replace: true });
+          break;
+
+        default:
+          navigate('/', { replace: true });
+          break;
       }
     } catch (err: any) {
       console.error('❌ Login Error:', err);
