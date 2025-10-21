@@ -11,6 +11,7 @@ import AdminDashboard from './pages/admin/AdminDashboard';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { ConfigProvider } from 'antd';
 import faIR from 'antd/locale/fa_IR';
+import DeveloperDashboard from './pages/developer/DeveloperDashboard';
 
 function App() {
   return (
@@ -28,12 +29,19 @@ function App() {
           <Route
             path="/consultant/*"
             element={
-              <ProtectedRoute allowedRoles={['consultant', 'developer']}>
+              <ProtectedRoute allowedRoles={['consultant']}>
                 <ConsultantDashboard />
               </ProtectedRoute>
             }
           />
-
+          <Route
+            path="/developer/*"
+            element={
+              <ProtectedRoute allowedRoles={['developer']}>
+                <DeveloperDashboard />
+              </ProtectedRoute>
+            }
+          />
           {/* داشبورد ادمین */}
           <Route
             path="/admin/*"

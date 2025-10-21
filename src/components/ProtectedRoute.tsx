@@ -20,8 +20,9 @@ export const ProtectedRoute = ({
       case 'admin':
         return <Navigate to="/admin" replace />;
       case 'consultant':
-      case 'developer':
         return <Navigate to="/consultant" replace />;
+      case 'developer':
+        return <Navigate to="/developer" replace />;
       default:
         return <Navigate to="/login" replace />;
     }
